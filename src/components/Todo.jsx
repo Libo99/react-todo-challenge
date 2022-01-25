@@ -38,6 +38,30 @@ const StyledTodoList = styled.div`
   }
 `;
 
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+
+  button {
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    position: relative;
+    cursor: pointer;
+  }
+  .selected::after {
+    content: '';
+    width: 100%;
+    border: 1.3px solid black;
+    position: absolute;
+    top: 24.5px;
+    z-index: 1;
+    left: 0;
+  }
+`;
+
 const StyledFooter = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;
@@ -51,6 +75,8 @@ const StyledFooter = styled.div`
 
 const Todo = () => {
   const [todoItems, setTodoItems] = useState([]);
+  const [showCompleted, setShowCompleted] = useState(false);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     // Load from storage
@@ -126,24 +152,77 @@ const Todo = () => {
     setTodoItems([...todos]);
   };
 
+  const handleClick = (e) => {
+    if (e.target.name === 'completed') {
+      setShowCompleted(true);
+    } else if (e.target.name === 'uncompleted') {
+      setShowCompleted(false);
+    }
+    setShowAll(false);
+  };
+
   return (
     <StyledTodo className="wrapper">
       <h1>todos.</h1>
       <AddItem addItem={addItem} />
+      <StyledButtonWrapper>
+        <button
+          className={showAll ? 'selected' : undefined}
+          type="button"
+          onClick={() => setShowAll(true)}
+        >
+          {todoItems.length} All Todos
+        </button>
+        <button
+          className={!showCompleted && !showAll ? 'selected' : undefined}
+          type="button"
+          onClick={handleClick}
+          name="uncompleted"
+        >
+          {todoItems.filter((item) => !item.completed).length} Active Todos
+        </button>
+        <button
+          className={showCompleted && !showAll ? 'selected' : undefined}
+          type="button"
+          onClick={handleClick}
+          name="completed"
+        >
+          {todoItems.filter((item) => item.completed).length} Completed Todos
+        </button>
+      </StyledButtonWrapper>
       <StyledTodoList>
-        <ul>
-          {todoItems
-            .sort((a, b) => b.date - a.date)
-            .map((item) => (
-              <TodoItem
-                item={item}
-                key={item.date}
-                deleteItem={deleteItem}
-                editItem={editItem}
-                completeItem={completeItem}
-              />
-            ))}
-        </ul>
+        {showAll ? (
+          <ul>
+            {todoItems
+              .sort((a, b) => b.date - a.date)
+              .map((item) => (
+                <TodoItem
+                  item={item}
+                  key={item.date}
+                  deleteItem={deleteItem}
+                  editItem={editItem}
+                  completeItem={completeItem}
+                />
+              ))}
+          </ul>
+        ) : (
+          <ul>
+            {todoItems
+              .sort((a, b) => b.date - a.date)
+              .filter((item) =>
+                showCompleted ? item.completed : !item.completed
+              )
+              .map((item) => (
+                <TodoItem
+                  item={item}
+                  key={item.date}
+                  deleteItem={deleteItem}
+                  editItem={editItem}
+                  completeItem={completeItem}
+                />
+              ))}
+          </ul>
+        )}
       </StyledTodoList>
       <StyledFooter>
         <p>A simple Todo app made with React.</p>
