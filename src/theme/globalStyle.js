@@ -14,6 +14,7 @@ const globalTheme = {
   lightGrey: '#d3d7dd',
   darkerGrey: '#b6bdc7',
   darkestGrey: '#2c3139',
+  completed: '#4BB543',
 };
 
 export { GlobalStyle, globalTheme };

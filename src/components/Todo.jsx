@@ -94,13 +94,29 @@ const Todo = () => {
 
   const addItem = (item) => {
     const todos = todoItems;
-    todos.push({ todo: item, date: new Date().getTime() });
+    todos.push({ todo: item, date: new Date().getTime(), completed: false });
     setTodoItems([...todos]);
   };
 
   const deleteItem = (item) => {
     const todos = todoItems.filter((todoItem) => item !== todoItem);
     setTodoItems(todos);
+  };
+
+  const changeItemStatus = (item) => {
+    const newItem = item;
+    if (newItem.completed === false) {
+      newItem.completed = true;
+    } else {
+      newItem.completed = false;
+    }
+  };
+
+  const completeItem = (item) => {
+    const todos = todoItems;
+    const newTodo = todos.find((todoItem) => todoItem.date === item.date);
+    changeItemStatus(newTodo);
+    setTodoItems([...todos]);
   };
 
   const editItem = (item, value) => {
@@ -124,6 +140,7 @@ const Todo = () => {
                 key={item.date}
                 deleteItem={deleteItem}
                 editItem={editItem}
+                completeItem={completeItem}
               />
             ))}
         </ul>

@@ -20,12 +20,14 @@ const StyledTodoItem = styled.li`
     .fa-circle {
       font-size: 16px;
       color: ${({ theme }) => theme.darkerGrey};
+      display: ${({ completed }) => completed && 'none'};
     }
 
     .fa-check-circle {
-      color: ${({ theme }) => theme.darkestGrey};
+      color: ${({ theme, completed }) =>
+        completed ? theme.completed : theme.darkestGrey};
       font-size: 16px;
-      display: none;
+      display: ${({ completed }) => (completed ? 'inline-block' : 'none')};
     }
 
     &:hover {
@@ -42,7 +44,7 @@ const StyledTodoItem = styled.li`
       }
     }
   }
-
+  
   input {
     font-size: 16px;
     color: ${({ theme }) => theme.darkestGrey};
@@ -51,6 +53,8 @@ const StyledTodoItem = styled.li`
     border: none;
     outline: none;
     background: ${({ theme }) => theme.backgroundColor};
+    text-decoration: ${({ completed }) =>
+      completed ? '2px line-through' : 'none'};
   }
 
   div {
@@ -75,14 +79,14 @@ const StyledTodoItem = styled.li`
   }
 `;
 
-const TodoItem = ({ deleteItem, item, editItem }) => {
+const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
   const [value, setValue] = useState(item.todo || '');
 
   const editHandler = useCallback(
     debounce(async (originalItem, editedItemValue) => {
       await editItem(originalItem, editedItemValue);
     }, 500),
-    [],
+    []
   );
 
   useEffect(() => {
@@ -92,9 +96,9 @@ const TodoItem = ({ deleteItem, item, editItem }) => {
   }, [item, value]);
 
   return (
-    <StyledTodoItem>
+    <StyledTodoItem completed={item.completed}>
       <div>
-        <button type="button" onClick={() => deleteItem(item)}>
+        <button type="button" onClick={() => completeItem(item)}>
           <FontAwesomeIcon className="fa-circle" icon={faCircle} />
           <FontAwesomeIcon className="fa-check-circle" icon={faCheckCircle} />
         </button>
@@ -105,6 +109,13 @@ const TodoItem = ({ deleteItem, item, editItem }) => {
             editHandler();
           }}
         />
+        <button
+          className="delete"
+          type="button"
+          onClick={() => deleteItem(item)}
+        >
+          Delete
+        </button>
       </div>
     </StyledTodoItem>
   );
@@ -113,9 +124,11 @@ const TodoItem = ({ deleteItem, item, editItem }) => {
 TodoItem.propTypes = {
   deleteItem: PropTypes.func.isRequired,
   editItem: PropTypes.func.isRequired,
+  completeItem: PropTypes.func.isRequired,
   item: PropTypes.shape({
     identifierKey: PropTypes.string,
     todo: PropTypes.string,
+    completed: PropTypes.bool,
   }).isRequired,
 };
 
