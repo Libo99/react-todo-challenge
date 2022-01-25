@@ -43,8 +43,22 @@ const StyledButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   gap: 20px;
+
   button {
     padding: 5px;
+    background-color: transparent;
+    border: none;
+    position: relative;
+    cursor: pointer;
+  }
+  .selected::after {
+    content: '';
+    width: 100%;
+    border: 1.3px solid black;
+    position: absolute;
+    top: 24.5px;
+    z-index: 1;
+    left: 0;
   }
 `;
 
@@ -103,12 +117,6 @@ const Todo = () => {
     }
   }, [todoItems]);
 
-  useEffect(() => {
-    if (!todoItems.length) {
-      setShowCompleted(false);
-    }
-  }, [todoItems, showCompleted]);
-
   const addItem = (item) => {
     const todos = todoItems;
     todos.push({ todo: item, date: new Date().getTime(), completed: false });
@@ -147,12 +155,20 @@ const Todo = () => {
     <StyledTodo className="wrapper">
       <h1>todos.</h1>
       <AddItem addItem={addItem} />
-      <StyledButtonWrapper>
-        <button type="button" onClick={() => setShowCompleted(false)}>
-          Active
+      <StyledButtonWrapper showCompleted={showCompleted}>
+        <button
+          className={!showCompleted && 'selected'}
+          type="button"
+          onClick={() => setShowCompleted(false)}
+        >
+          Active Todos
         </button>
-        <button type="button" onClick={() => setShowCompleted(true)}>
-          Completed
+        <button
+          className={showCompleted && 'selected'}
+          type="button"
+          onClick={() => setShowCompleted(true)}
+        >
+          Completed Todos
         </button>
       </StyledButtonWrapper>
       <StyledTodoList>
