@@ -191,7 +191,7 @@ const Todo = () => {
           <ul>
             {todoItems
               .sort((a, b) => b.date - a.date)
-              .filter((item) => item.completed === false)
+              .filter((item) => !item.completed)
               .map((item) => (
                 <TodoItem
                   item={item}
