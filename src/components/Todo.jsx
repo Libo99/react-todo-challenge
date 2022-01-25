@@ -38,6 +38,16 @@ const StyledTodoList = styled.div`
   }
 `;
 
+const StyledButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  button {
+    padding: 5px;
+  }
+`;
+
 const StyledFooter = styled.div`
   margin-bottom: 40px;
   margin-top: 20px;
@@ -51,6 +61,7 @@ const StyledFooter = styled.div`
 
 const Todo = () => {
   const [todoItems, setTodoItems] = useState([]);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   useEffect(() => {
     // Load from storage
@@ -92,6 +103,12 @@ const Todo = () => {
     }
   }, [todoItems]);
 
+  useEffect(() => {
+    if (!todoItems.length) {
+      setShowCompleted(false);
+    }
+  }, [todoItems, showCompleted]);
+
   const addItem = (item) => {
     const todos = todoItems;
     todos.push({ todo: item, date: new Date().getTime(), completed: false });
@@ -130,20 +147,46 @@ const Todo = () => {
     <StyledTodo className="wrapper">
       <h1>todos.</h1>
       <AddItem addItem={addItem} />
+      <StyledButtonWrapper>
+        <button type="button" onClick={() => setShowCompleted(false)}>
+          Active
+        </button>
+        <button type="button" onClick={() => setShowCompleted(true)}>
+          Completed
+        </button>
+      </StyledButtonWrapper>
       <StyledTodoList>
-        <ul>
-          {todoItems
-            .sort((a, b) => b.date - a.date)
-            .map((item) => (
-              <TodoItem
-                item={item}
-                key={item.date}
-                deleteItem={deleteItem}
-                editItem={editItem}
-                completeItem={completeItem}
-              />
-            ))}
-        </ul>
+        {showCompleted ? (
+          <ul>
+            {todoItems
+              .sort((a, b) => b.date - a.date)
+              .filter((item) => item.completed)
+              .map((item) => (
+                <TodoItem
+                  item={item}
+                  key={item.date}
+                  deleteItem={deleteItem}
+                  editItem={editItem}
+                  completeItem={completeItem}
+                />
+              ))}
+          </ul>
+        ) : (
+          <ul>
+            {todoItems
+              .sort((a, b) => b.date - a.date)
+              .filter((item) => item.completed === false)
+              .map((item) => (
+                <TodoItem
+                  item={item}
+                  key={item.date}
+                  deleteItem={deleteItem}
+                  editItem={editItem}
+                  completeItem={completeItem}
+                />
+              ))}
+          </ul>
+        )}
       </StyledTodoList>
       <StyledFooter>
         <p>A simple Todo app made with React.</p>
