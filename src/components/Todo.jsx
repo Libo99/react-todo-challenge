@@ -171,7 +171,7 @@ const Todo = () => {
           type="button"
           onClick={() => setShowAll(true)}
         >
-          All Todos
+          {todoItems.length} All Todos
         </button>
         <button
           className={!showCompleted && !showAll ? 'selected' : undefined}
@@ -179,7 +179,7 @@ const Todo = () => {
           onClick={handleClick}
           name="uncompleted"
         >
-          Active Todos
+          {todoItems.filter((item) => !item.completed).length} Active Todos
         </button>
         <button
           className={showCompleted && !showAll ? 'selected' : undefined}
@@ -187,7 +187,7 @@ const Todo = () => {
           onClick={handleClick}
           name="completed"
         >
-          Completed Todos
+          {todoItems.filter((item) => item.completed).length} Completed Todos
         </button>
       </StyledButtonWrapper>
       <StyledTodoList>
