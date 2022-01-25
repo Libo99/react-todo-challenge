@@ -76,6 +76,7 @@ const StyledFooter = styled.div`
 const Todo = () => {
   const [todoItems, setTodoItems] = useState([]);
   const [showCompleted, setShowCompleted] = useState(false);
+  const [showAll, setShowAll] = useState(true);
 
   useEffect(() => {
     // Load from storage
@@ -151,58 +152,62 @@ const Todo = () => {
     setTodoItems([...todos]);
   };
 
+  const handleClick = (e) => {
+    if (e.target.name === 'completed') {
+      setShowCompleted(true);
+    } else if (e.target.name === 'uncompleted') {
+      setShowCompleted(false);
+    }
+    setShowAll(false);
+  };
+
   return (
     <StyledTodo className="wrapper">
       <h1>todos.</h1>
       <AddItem addItem={addItem} />
-      <StyledButtonWrapper showCompleted={showCompleted}>
+      <StyledButtonWrapper>
         <button
-          className={!showCompleted && 'selected'}
+          className={showAll && 'selected'}
           type="button"
-          onClick={() => setShowCompleted(false)}
+          onClick={() => setShowAll(true)}
+        >
+          All Todos
+        </button>
+        <button
+          className={!showCompleted && !showAll && 'selected'}
+          type="button"
+          onClick={handleClick}
+          name="uncompleted"
         >
           Active Todos
         </button>
         <button
-          className={showCompleted && 'selected'}
+          className={showCompleted && !showAll && 'selected'}
           type="button"
-          onClick={() => setShowCompleted(true)}
+          onClick={handleClick}
+          name="completed"
         >
           Completed Todos
         </button>
       </StyledButtonWrapper>
       <StyledTodoList>
-        {showCompleted ? (
-          <ul>
-            {todoItems
-              .sort((a, b) => b.date - a.date)
-              .filter((item) => item.completed)
-              .map((item) => (
-                <TodoItem
-                  item={item}
-                  key={item.date}
-                  deleteItem={deleteItem}
-                  editItem={editItem}
-                  completeItem={completeItem}
-                />
-              ))}
-          </ul>
-        ) : (
-          <ul>
-            {todoItems
-              .sort((a, b) => b.date - a.date)
-              .filter((item) => !item.completed)
-              .map((item) => (
-                <TodoItem
-                  item={item}
-                  key={item.date}
-                  deleteItem={deleteItem}
-                  editItem={editItem}
-                  completeItem={completeItem}
-                />
-              ))}
-          </ul>
-        )}
+        <ul>
+          {todoItems
+            .sort((a, b) => b.date - a.date)
+            .filter((item) =>
+              // eslint-disable-next-line no-nested-ternary
+              showCompleted ? item.completed : showAll ? item : !item.completed
+            )
+            .map((item) => (
+              <TodoItem
+                item={item}
+                key={item.date}
+                deleteItem={deleteItem}
+                editItem={editItem}
+                completeItem={completeItem}
+              />
+            ))}
+        </ul>
       </StyledTodoList>
       <StyledFooter>
         <p>A simple Todo app made with React.</p>
