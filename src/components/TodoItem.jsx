@@ -165,8 +165,7 @@ TodoItem.propTypes = {
     identifierKey: PropTypes.string,
     todo: PropTypes.string,
     completed: PropTypes.bool,
-    // eslint-disable-next-line react/forbid-prop-types
-    date: PropTypes.any,
+    date: PropTypes.number,
     // eslint-disable-next-line react/forbid-prop-types
     dueDate: PropTypes.any,
   }).isRequired,
