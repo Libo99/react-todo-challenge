@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { getNewDate } from '../services/dateService';
 
 const StyledAddItem = styled.form`
   display: flex;
@@ -54,7 +55,7 @@ const StyledAddItem = styled.form`
 
 const AddItem = ({ addItem }) => {
   const [value, setValue] = useState('');
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(getNewDate());
 
   return (
     <StyledAddItem
@@ -62,7 +63,7 @@ const AddItem = ({ addItem }) => {
         event.preventDefault();
         addItem(value, startDate);
         setValue('');
-        setStartDate(new Date());
+        setStartDate(getNewDate());
       }}
     >
       <input
@@ -76,7 +77,7 @@ const AddItem = ({ addItem }) => {
       />
       <DatePicker
         onChange={(e) => setStartDate(e)}
-        minDate={new Date()}
+        minDate={getNewDate()}
         selected={startDate}
       />
       <button type="submit">

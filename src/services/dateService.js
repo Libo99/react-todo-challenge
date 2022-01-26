@@ -32,3 +32,8 @@ export const formatDueDate = (difference) => {
   }
   return `${difference} days left`;
 };
+
+export const getNewDate = () => {
+  const date = new Date();
+  return date;
+};
