@@ -76,7 +76,7 @@ const AddItem = ({ addItem }) => {
       />
       <DatePicker
         onChange={(e) => setStartDate(e)}
-        minDate={startDate}
+        minDate={new Date()}
         selected={startDate}
         className="date-picker"
       />

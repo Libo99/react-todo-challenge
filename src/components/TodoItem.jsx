@@ -119,7 +119,7 @@ const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
 
   useEffect(() => {
     calculateDays(setDifference, item.dueDate, item.date);
-  }, [item]);
+  }, []);
 
   return (
     <StyledTodoItem completed={item.completed}>
