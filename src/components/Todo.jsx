@@ -3,6 +3,7 @@ import styled from 'styled-components/macro';
 
 import TodoItem from './TodoItem';
 import AddItem from './AddItem';
+import { newDate } from '../services/dateService';
 
 const StyledTodo = styled.div`
   width: 100%;
@@ -122,7 +123,7 @@ const Todo = () => {
     const todos = todoItems;
     todos.push({
       todo: item,
-      date: new Date().getTime(),
+      date: newDate(),
       completed: false,
       dueDate: due,
     });
