@@ -118,9 +118,14 @@ const Todo = () => {
     }
   }, [todoItems]);
 
-  const addItem = (item) => {
+  const addItem = (item, itemImage) => {
     const todos = todoItems;
-    todos.push({ todo: item, date: new Date().getTime(), completed: false });
+    todos.push({
+      todo: item,
+      date: new Date().getTime(),
+      completed: false,
+      image: URL.createObjectURL(itemImage),
+    });
     setTodoItems([...todos]);
   };
 

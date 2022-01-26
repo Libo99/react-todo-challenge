@@ -44,7 +44,7 @@ const StyledTodoItem = styled.li`
       }
     }
   }
-  
+
   input {
     font-size: 16px;
     color: ${({ theme }) => theme.darkestGrey};
@@ -116,6 +116,7 @@ const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
         >
           Delete
         </button>
+        <img src={item.image} alt={item.todo} width={100} height={100} />
       </div>
     </StyledTodoItem>
   );
@@ -129,6 +130,7 @@ TodoItem.propTypes = {
     identifierKey: PropTypes.string,
     todo: PropTypes.string,
     completed: PropTypes.bool,
+    image: PropTypes.string,
   }).isRequired,
 };
 

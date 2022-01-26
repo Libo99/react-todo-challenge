@@ -49,12 +49,13 @@ const StyledAddItem = styled.form`
 
 const AddItem = ({ addItem }) => {
   const [value, setValue] = useState('');
+  const [image, setImage] = useState(null);
 
   return (
     <StyledAddItem
       onSubmit={(event) => {
         event.preventDefault();
-        addItem(value);
+        addItem(value, image);
         setValue('');
       }}
     >
@@ -65,6 +66,13 @@ const AddItem = ({ addItem }) => {
           setValue(event.target.value);
         }}
         placeholder="New todo..."
+        required
+      />
+      <input
+        type="file"
+        onChange={(event) => {
+          setImage(event.target.files[0]);
+        }}
         required
       />
       <button type="submit">
