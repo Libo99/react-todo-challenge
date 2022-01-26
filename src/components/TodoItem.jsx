@@ -91,12 +91,15 @@ const StyledTodoItem = styled.li`
   .due-date {
     flex-direction: column;
     align-items: flex-start;
+    color: ${({ due }) => (due <= 2 ? 'red' : 'black')};
+  }
+
+  .due-date p:last-child {
+    margin-top: -10px;
+    color: black;
   }
   p {
     font-size: 13px;
-  }
-  p:last-child {
-    margin-top: -10px;
   }
 `;
 
@@ -122,7 +125,7 @@ const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
   }, []);
 
   return (
-    <StyledTodoItem completed={item.completed}>
+    <StyledTodoItem completed={item.completed} due={difference}>
       <div>
         <button type="button" onClick={() => completeItem(item)}>
           <FontAwesomeIcon className="fa-circle" icon={faCircle} />

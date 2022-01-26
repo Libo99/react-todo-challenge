@@ -78,7 +78,6 @@ const AddItem = ({ addItem }) => {
         onChange={(e) => setStartDate(e)}
         minDate={new Date()}
         selected={startDate}
-        className="date-picker"
       />
       <button type="submit">
         <FontAwesomeIcon className="fa-plus" icon={faPlus} />
