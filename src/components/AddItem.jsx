@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const StyledAddItem = styled.form`
   display: flex;
@@ -45,17 +47,22 @@ const StyledAddItem = styled.form`
       }
     }
   }
+  .react-datepicker-popper {
+    z-index: 2;
+  }
 `;
 
 const AddItem = ({ addItem }) => {
   const [value, setValue] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
 
   return (
     <StyledAddItem
       onSubmit={(event) => {
         event.preventDefault();
-        addItem(value);
+        addItem(value, startDate);
         setValue('');
+        setStartDate(new Date());
       }}
     >
       <input
@@ -66,6 +73,12 @@ const AddItem = ({ addItem }) => {
         }}
         placeholder="New todo..."
         required
+      />
+      <DatePicker
+        onChange={(e) => setStartDate(e)}
+        minDate={startDate}
+        selected={startDate}
+        className="date-picker"
       />
       <button type="submit">
         <FontAwesomeIcon className="fa-plus" icon={faPlus} />

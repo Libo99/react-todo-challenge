@@ -118,9 +118,14 @@ const Todo = () => {
     }
   }, [todoItems]);
 
-  const addItem = (item) => {
+  const addItem = (item, due) => {
     const todos = todoItems;
-    todos.push({ todo: item, date: new Date().getTime(), completed: false });
+    todos.push({
+      todo: item,
+      date: new Date().getTime(),
+      completed: false,
+      dueDate: due,
+    });
     setTodoItems([...todos]);
   };
 

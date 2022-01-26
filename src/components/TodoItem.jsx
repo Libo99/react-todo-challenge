@@ -4,6 +4,11 @@ import debounce from 'lodash.debounce';
 import styled from 'styled-components/macro';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircle, faCheckCircle } from '@fortawesome/free-regular-svg-icons';
+import {
+  formatDate,
+  calculateDays,
+  formatDueDate,
+} from '../services/dateService';
 
 const StyledTodoItem = styled.li`
   padding: 15px 0;
@@ -44,7 +49,7 @@ const StyledTodoItem = styled.li`
       }
     }
   }
-  
+
   input {
     font-size: 16px;
     color: ${({ theme }) => theme.darkestGrey};
@@ -77,10 +82,27 @@ const StyledTodoItem = styled.li`
       }
     }
   }
+  .date-display {
+    border: none;
+  }
+  .date-container {
+    justify-content: space-between;
+  }
+  .due-date {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  p {
+    font-size: 13px;
+  }
+  p:last-child {
+    margin-top: -10px;
+  }
 `;
 
 const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
   const [value, setValue] = useState(item.todo || '');
+  const [difference, setDifference] = useState(0);
 
   const editHandler = useCallback(
     debounce(async (originalItem, editedItemValue) => {
@@ -94,6 +116,10 @@ const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
       editHandler(item, value);
     }
   }, [item, value]);
+
+  useEffect(() => {
+    calculateDays(setDifference, item.dueDate, item.date);
+  }, [item]);
 
   return (
     <StyledTodoItem completed={item.completed}>
@@ -117,6 +143,17 @@ const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
           Delete
         </button>
       </div>
+      <div className="date-display date-container">
+        <p>Added: {formatDate(item, item.date)}</p>
+        {item.dueDate ? (
+          <div className="date-display due-date">
+            <p>Due: {formatDueDate(difference)}</p>
+            <p>Date: {formatDate(item, item.dueDate)}</p>
+          </div>
+        ) : (
+          <button type="button">Add Due Date</button>
+        )}
+      </div>
     </StyledTodoItem>
   );
 };
@@ -129,6 +166,9 @@ TodoItem.propTypes = {
     identifierKey: PropTypes.string,
     todo: PropTypes.string,
     completed: PropTypes.bool,
+    date: PropTypes.number,
+    // eslint-disable-next-line react/forbid-prop-types
+    dueDate: PropTypes.any,
   }).isRequired,
 };
 
