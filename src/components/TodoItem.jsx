@@ -145,14 +145,10 @@ const TodoItem = ({ deleteItem, item, editItem, completeItem }) => {
       </div>
       <div className="date-display date-container">
         <p>Added: {formatDate(item, item.date)}</p>
-        {item.dueDate ? (
-          <div className="date-display due-date">
-            <p>Due: {formatDueDate(difference)}</p>
-            <p>Date: {formatDate(item, item.dueDate)}</p>
-          </div>
-        ) : (
-          <button type="button">Add Due Date</button>
-        )}
+        <div className="date-display due-date">
+          <p>Due: {formatDueDate(difference)}</p>
+          <p>Date: {formatDate(item, item.dueDate)}</p>
+        </div>
       </div>
     </StyledTodoItem>
   );
